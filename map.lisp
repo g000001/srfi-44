@@ -32,7 +32,7 @@
 
 (defgeneric map-equivalence-function (map))
 (defgeneric map-key-equivalence-function (map))
-(defgeneric map-contains-key? (map))
+(defgeneric map-contains-key? (map key))
 (defgeneric map-keys->list (map))
 (defgeneric map-get (map key &optional absence-thunk))
 (defgeneric map-put (map key value &optional absence-thunk))

@@ -19,7 +19,6 @@
                ;; (:file "tiny-clos")
                ;; (:file "utilities_tiny-clos")
                ;; (:file "srfi-44_tiny-clos")
-               #|(:file "srfi-44")|#
                (:file "list")
                (:file "vector-string")
                (:file "alist")
@@ -29,7 +28,8 @@
                (:file "map")
                (:file "sequence")
                (:file "flexible-sequence")
-               (:file "attribute")))
+               (:file "attribute")
+               (:file "srfi-44")))
 
 (defmethod perform ((o test-op) (c (eql (find-system :srfi-44))))
   (load-system :srfi-44)
