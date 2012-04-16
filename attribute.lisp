@@ -21,7 +21,7 @@
 (defclass <limited-attribute> (<attribute>) ())
 (defvar <limited-attribute> (find-class '<limited-attribute>))
 
-(define-function collection-get-any #'values) ;dummy
+(defgeneric collection-get-any (coll &optional maybe-ft))
 
 ;;; - Attributes -
 
@@ -58,200 +58,217 @@
 ;;;;;; - Scheme Collections -
 
 #|(add-methods
- (list #'collection-fold-keys-left  #'list-fold-keys-left  (list <list>))
- (list #'collection-fold-keys-right #'list-fold-keys-right (list <list>))
-
- (list #'collection-fold-left  #'list-fold-left  (list <list>))
- (list #'collection-fold-right #'list-fold-right (list <list>))
-
- (list #'collection-size   #'list-size   (list <list>))
- (list #'collection-count  #'list-count  (list <list>))
- (list #'collection-empty? #'list-empty? (list <list>))
-
- (list #'collection-get-any #'list-get-any (list <list>))
-
- (list #'collection-copy  #'list-copy  (list <list>))
-
- (list #'collection-clear  #'list-clear  (list <list>))
- (list #'collection-clear! #'list-clear! (list <list>))
-
- (list #'collection= #'list= (list <top> <list>))
-
- ;;;
-
- (list #'bag-equivalence-function #'list-equivalence-function (list <list>))
-
- (list #'bag-contains? #'list-contains? (list <list>))
-
  (list #'bag-add  #'list-add  (list <list> <top>))
  (list #'bag-add! #'list-add! (list <list> <top>))
-
  (list #'bag-delete  #'list-delete  (list <list> <top>))
  (list #'bag-delete! #'list-delete! (list <list> <top>))
-
  (list #'bag-delete-all  #'list-delete-all  (list <list> <top>))
  (list #'bag-delete-all! #'list-delete-all! (list <list> <top>))
-
  (list #'bag-add-from  #'list-add-from  (list <list> <bag>))
  (list #'bag-add-from! #'list-add-from! (list <list> <bag>))
-
  (list #'bag-delete-from  #'list-delete-from  (list <list> <bag>))
  (list #'bag-delete-from! #'list-delete-from! (list <list> <bag>))
-
  (list #'bag-delete-all-from  #'list-delete-all-from  (list <list> <bag>))
  (list #'bag-delete-all-from! #'list-delete-all-from! (list <list> <bag>))
-
- ;;;
-
- (list #'sequence-ref  #'list-ref  (list <list> <number>))
- (list #'sequence-set  #'list-set  (list <list> <number>))
- (list #'sequence-set! #'list-set! (list <list> <number>))
-
- (list #'sequence-get-left  #'list-get-left  (list <list>))
- (list #'sequence-get-right #'list-get-right (list <list>))
-
-
-
-
-
- ;;;
-
  (list #'flexible-sequence-insert  #'list-insert  (list <list> <number>))
  (list #'flexible-sequence-insert! #'list-insert! (list <list> <number>))
-
  (list #'flexible-sequence-delete-at  #'list-delete-at
        (list <list> <number>))
  (list #'flexible-sequence-delete-at! #'list-delete-at!
        (list <list> <number>))
-
  (list #'flexible-sequence-insert-left  #'list-insert-left  (list <list> <top>))
  (list #'flexible-sequence-insert-left! #'list-insert-left! (list <list> <top>))
-
  (list #'sequence-insert-right  #'list-insert-right
        (list <list> <top>))
  (list #'sequence-insert-right! #'list-insert-right!
        (list <list> <top>))
-
  (list #'flexible-sequence-delete-left  #'list-delete-left  (list <list>))
  (list #'flexible-sequence-delete-left! #'list-delete-left! (list <list>))
-
  (list #'flexible-sequence-delete-right  #'list-delete-right
        (list <list>))
  (list #'flexible-sequence-delete-right! #'list-delete-right!
        (list <list>)))|#
 
 #|(add-methods
- (list #'collection-fold-left  #'alist-map-fold-left  (list <alist-map>))
- (list #'collection-fold-right #'alist-map-fold-right (list <alist-map>))
-
- (list #'collection-fold-keys-left  #'alist-map-fold-keys-left
-       (list <alist-map>))
- (list #'collection-fold-keys-right #'alist-map-fold-keys-right
-       (list <alist-map>))
-
- (list #'collection-size #'alist-map-size (list <alist-map>))
- (list #'collection-count #'alist-map-count (list <alist-map>))
-
  (list #'map-equivalence-function     #'alist-map-equivalence-function     (list <alist-map>))
  (list #'map-key-equivalence-function #'alist-map-key-equivalence-function (list <alist-map>))
-
  (list #'map-contains-key? #'alist-map-contains-key? (list <alist-map>))
-
  (list #'map-keys->list #'alist-map-keys->list (list <alist-map>))
-
  (list #'map-get #'alist-map-get (list <alist-map>))
-
- (list #'collection-clear #'alist-map-clear (list <alist-map>))
- (list #'collection-clear! #'alist-map-clear! (list <alist-map>))
- (list #'collection-clear #'alist-map-clear (list <alist-map>))
- (list #'collection-clear! #'alist-map-clear! (list <alist-map>))
-
- (list #'collection-copy  #'alist-map-copy  (list <alist-map>))
-
  (list #'map-put  #'alist-map-put  (list <alist-map>))
  (list #'map-put! #'alist-map-put! (list <alist-map>))
-
  (list #'map-update  #'alist-map-update  (list <alist-map>))
  (list #'map-update! #'alist-map-update! (list <alist-map>))
-
  (list #'map-delete  #'alist-map-delete  (list <alist-map>))
  (list #'map-delete! #'alist-map-delete! (list <alist-map>))
-
  (list #'map-delete-from  #'alist-map-delete-from  (list <alist-map>))
  (list #'map-delete-from! #'alist-map-delete-from! (list <alist-map>))
-
  (list #'map-add-from  #'alist-map-add-from  (list <alist-map>))
  (list #'map-add-from! #'alist-map-add-from! (list <alist-map>)))|#
 
-#|(add-methods
- (list #'collection-fold-keys-left  #'vector-fold-keys-left  (list <vector>))
- (list #'collection-fold-keys-right #'vector-fold-keys-right (list <vector>))
 
- (list #'collection-fold-left  #'vector-fold-left  (list <vector>))
- (list #'collection-fold-right #'vector-fold-right (list <vector>))
+(defmethod collection-fold-keys-left (coll fold-function &rest seed)
+  (apply (etypecase coll
+           (string #'string-fold-keys-left)
+           (vector #'vector-fold-keys-left)
+           (list #'list-fold-keys-left)
+           (<alist-map> #'alist-map-fold-keys-left) )
+         coll
+         fold-function
+         seed ))
 
- (list #'collection-size   #'vector-size   (list <vector>))
- (list #'collection-count  #'vector-count  (list <vector>))
- (list #'collection-empty? #'vector-empty? (list <vector>))
+(defmethod collection-fold-keys-right (coll fold-function &rest seed)
+  (apply (etypecase coll
+             (string #'string-fold-keys-right)
+             (vector #'vector-fold-keys-right)
+             (list #'list-fold-keys-right)
+             (<alist-map> #'alist-map-fold-keys-right))
+         coll
+         fold-function
+         seed))
 
- (list #'collection-get-any #'vector-get-any (list <vector>))
+(defmethod collection-fold-left (coll fold-function &rest seed)
+  (apply (etypecase coll
+             (string #'string-fold-left)
+             (vector #'vector-fold-left)
+             (list #'list-fold-left)
+             (<alist-map> #'alist-map-fold-left))
+         coll
+         fold-function
+         seed))
 
- (list #'collection-copy  #'vector-copy  (list <vector>))
+(defmethod collection-fold-right (coll fold-function &rest seed)
+  (apply (etypecase coll
+             (string #'string-fold-right)
+             (vector #'vector-fold-right)
+             (list #'list-fold-right)
+             (<alist-map> #'alist-map-fold-right))
+         coll
+         fold-function
+         seed))
 
- (list #'collection-clear  #'vector-clear  (list <vector>))
- (list #'collection-clear! #'vector-clear! (list <vector>))
+(defmethod collection-size (coll)
+  (funcall (etypecase coll
+             (string #'string-size)
+             (vector #'vector-size)
+             (list #'list-size)
+             (<alist-map> #'alist-map-size))
+           coll ))
 
- (list #'collection= #'vector= (list <top> <vector>))
+(defmethod collection-count (coll value)
+  (funcall (etypecase coll
+             (string #'string-count)
+             (vector #'vector-count)
+             (list #'list-count)
+             (<alist-map> #'alist-map-count))
+           coll
+           value ))
 
- ;;;
+(defmethod collection-empty? (coll)
+  (funcall (etypecase coll
+             (string #'string-empty?)
+             (vector #'vector-empty?)
+             (list #'list-empty?)
+             (<alist-map> #'alist-map-empty?))
+           coll ))
 
- (list #'bag-equivalence-function #'vector-equivalence-function (list <vector>))
+(defmethod collection-get-any (coll &optional maybe-ft)
+  (apply (etypecase coll
+           (string #'string-get-any)
+           (vector #'vector-get-any)
+           (list #'list-get-any)
+           (<alist-map> #'alist-map-get-any))
+         coll
+         (and maybe-ft (list maybe-ft))))
 
- (list #'bag-contains? #'vector-contains? (list <vector>))
+(defmethod collection-copy (coll)
+  (funcall (etypecase coll
+             (string #'string-copy)
+             (vector #'vector-copy)
+             (list #'list-copy)
+             (<alist-map> #'alist-map-clear))
+           coll ))
 
- ;;;
+(defmethod collection-clear (coll)
+  (funcall (etypecase coll
+             (string #'string-clear)
+             (vector #'vector-clear)
+             (list #'list-clear)
+             (<alist-map> #'alist-map-clear))
+           coll ))
 
- (list #'sequence-ref  #'vector-ref  (list <vector> <number>))
- (list #'sequence-set  #'vector-set  (list <vector> <number>))
- (list #'sequence-set! #'vector-set! (list <vector> <number>))
+(defmethod collection-clear! (coll)
+  (funcall (etypecase coll
+             (string #'string-clear!)
+             (vector #'vector-clear!)
+             (list #'list-clear!)
+             (<alist-map> #'alist-map-clear!))
+           coll ))
 
- (list #'sequence-get-left  #'vector-get-left  (list <vector>))
- (list #'sequence-get-right #'vector-get-right (list <vector>)) )|#
+(defmethod collection=-2op (pred col1 col2)
+  (funcall (etypecase col1
+             (string #'string=)
+             (vector #'vector=)
+             (list #'list=) )
+           pred col1 col2))
 
-#|(add-methods
- (list #'collection-fold-keys-left  #'string-fold-keys-left  (list <string>))
- (list #'collection-fold-keys-right #'string-fold-keys-right (list <string>))
+(defmethod bag-equivalence-function (object)
+  (funcall (etypecase object
+             (string #'string-equivalence-function)
+             (vector #'vector-equivalence-function)
+             (list #'list-equivalence-function) )
+           object))
 
- (list #'collection-fold-left  #'string-fold-left  (list <string>))
- (list #'collection-fold-right #'string-fold-right (list <string>))
+(defmethod bag-contains? (bag value)
+  (funcall (etypecase bag
+             (string #'string-contains?)
+             (vector #'vector-contains?)
+             (list #'list-contains?) )
+           bag
+           value))
 
- (list #'collection-size   #'string-size   (list <string>))
- (list #'collection-count  #'string-count  (list <string>))
- (list #'collection-empty? #'string-empty? (list <string>))
+(defmethod sequence-ref (sequence integer &optional absence-thunk)
+  (apply (etypecase sequence
+           (string #'string-ref)
+           (vector #'vector-ref)
+           (list #'list-ref) )
+         sequence
+         integer
+         (and absence-thunk (list absence-thunk)) ))
 
- (list #'collection-get-any #'string-get-any (list <string>))
+(defmethod sequence-set (sequence integer value)
+  (funcall (etypecase sequence
+             (string #'string-set)
+             (vector #'vector-set)
+             (list #'list-set) )
+           sequence
+           integer
+           value))
 
- (list #'collection-copy  #'string-copy  (list <string>))
+(defmethod sequence-set! (sequence integer value)
+  (funcall (etypecase sequence
+             (string #'string-set!)
+             (vector #'vector-set!)
+             (list #'list-set!) )
+           sequence
+           integer
+           value))
 
- (list #'collection-clear  #'string-clear  (list <string>))
- (list #'collection-clear! #'string-clear! (list <string>))
+(defmethod sequence-get-left (sequence &optional absence-thunk)
+  (apply (etypecase sequence
+           (string #'string-get-left)
+           (vector #'vector-get-left)
+           (list #'list-get-left) )
+         sequence
+         (and absence-thunk (list absence-thunk)) ))
 
- (list #'collection= #'string= (list <top> <string>))
-
- ;;;
-
- (list #'bag-equivalence-function #'string-equivalence-function (list <string>))
-
- (list #'bag-contains? #'string-contains? (list <string>))
-
- ;;;
- (list #'sequence-ref  #'string-ref  (list <string> <number>))
- (list #'sequence-set  #'string-set  (list <string> <number>))
- (list #'sequence-set! #'string-set! (list <string> <number>))
-
- (list #'sequence-get-left  #'string-get-left  (list <string>))
- (list #'sequence-get-right #'string-get-right (list <string>))
- )|#
+(defmethod sequence-get-right (sequence &optional absence-thunk)
+  (apply (etypecase sequence
+           (string #'string-get-right)
+           (vector #'vector-get-right)
+           (list #'list-get-right))
+         sequence
+         (and absence-thunk (list absence-thunk))))
 
 (defmethod sequence-replace-from! ((sequence cl:sequence)
                                   dest-start source-sequence
@@ -265,7 +282,6 @@
          source-sequence
          `(,@(and source-start (list source-start))
              ,@(and source-end (list source-end) ))))
-
 
 (defmethod sequence-replace-from ((sequence cl:sequence)
                                   dest-start source-sequence

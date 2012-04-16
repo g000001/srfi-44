@@ -84,10 +84,10 @@
            (apply kons elt knils))
          knils))
 
-(define-function (vector-comparator vec)
+(define-function (vector-equivalence-function vec)
   (declare (ignore vec))
   #'eqv?)
-(define-function (string-comparator str)
+(define-function (string-equivalence-function str)
   (declare (ignore str))
   #'char=?)
 

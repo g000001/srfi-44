@@ -73,7 +73,7 @@
            (apply kons value knils))
          knils))
 
-(define-function (list-comparator l)
+(define-function (list-equivalence-function l)
   (declare (ignore l))
   #'eqv?)
 

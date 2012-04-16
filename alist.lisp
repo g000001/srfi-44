@@ -4,7 +4,7 @@
 
 #|(add-method #'initialize
   (method next-method ((lmap <alist-map>) initargs)
-    (slot-set! lmap 'comparator (car initargs))
+    (slot-set! lmap 'equivalence-function (car initargs))
     (slot-set! lmap 'contents   (cons (list (list 'unique))
                                       (cadr initargs)))
     lmap))|#
@@ -13,7 +13,7 @@
   (method next-method ((lmap <alist-map>)) 'alist-map))|#
 
 (defclass <alist-map> (<map>)
-  ((comparator :initarg :comparator)
+  ((equivalence-function :initarg :equivalence-function)
    ;; contents: format (:dummy elt ...) tconc?
    ))
 
@@ -22,10 +22,10 @@
 (defun alist-map? (obj)
   (typep obj <alist-map>))
 
-(defun make<alist-map> (ignore comparator contents)
+(defun make<alist-map> (ignore equivalence-function contents)
   (declare (ignore ignore))
   (make-instance <alist-map>
-                 :comparator comparator
+                 :equivalence-function equivalence-function
                  :contents (cons (list 'unique) contents)))
 
 
@@ -33,10 +33,10 @@
   (for-each (lambda (map) (check-arg #'alist-map? map 'alist-map=)) maps)
   (apply #'map= elt=? maps))
 
-(define-function (make-alist-map . maybe-key-comparator)
-  (let*-optionals #'make-alist-map maybe-key-comparator
-                  ((key-comparator #'eqv?))
-    (make<alist-map> <alist-map> key-comparator '())))
+(define-function (make-alist-map . maybe-key-equivalence-function)
+  (let*-optionals #'make-alist-map maybe-key-equivalence-function
+                  ((key-equivalence-function #'eqv?))
+    (make<alist-map> <alist-map> key-equivalence-function '())))
 (define-function (copy-pair pair)
   (cons (car pair) (cdr pair)))
 (define-function (alist-map . args)
@@ -59,7 +59,7 @@
      (let () ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap (?compare 'NIL 'NIL)
        ?body1 ?body2 ***)
-     (let ((?compare (slot-value ?lmap 'comparator)))
+     (let ((?compare (slot-value ?lmap 'equivalence-function)))
        ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap ('NIL ?contents 'NIL)
        ?body1 ?body2 ***)
@@ -67,7 +67,7 @@
        ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap (?compare ?contents 'NIL)
        ?body1 ?body2 ***)
-     (let ((?compare (slot-value ?lmap 'comparator))
+     (let ((?compare (slot-value ?lmap 'equivalence-function))
            (?contents (slot-value ?lmap 'contents)))
        ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap ('NIL 'NIL ?contents-cdr)
@@ -76,7 +76,7 @@
        ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap (?compare 'NIL ?contents-cdr)
        ?body1 ?body2 ***)
-     (let ((?compare (slot-value ?lmap 'comparator))
+     (let ((?compare (slot-value ?lmap 'equivalence-function))
            (?contents-cdr (cdr (slot-value ?lmap 'contents))))
        ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap ('NIL ?contents ?contents-cdr)
@@ -86,7 +86,7 @@
        ?body1 ?body2 ***))
     ((destructure-alist-map ?lmap (?compare ?contents ?contents-cdr)
        ?body1 ?body2 ***)
-     (let ((?compare (slot-value ?lmap 'comparator))
+     (let ((?compare (slot-value ?lmap 'equivalence-function))
            (?contents (slot-value ?lmap 'contents))
            (?contents-cdr (cdr (slot-value ?lmap 'contents))))
        ?body1 ?body2 ***))))
@@ -119,9 +119,9 @@
            (apply kons value knils))
          knils))
 
-(define-function (alist-map-key-comparator lmap)
-  (slot-value lmap 'comparator))
-(define-function alist-map-comparator #'alist-map-key-comparator)
+(define-function (alist-map-key-equivalence-function lmap)
+  (slot-value lmap 'equivalence-function))
+(define-function alist-map-equivalence-function #'alist-map-key-equivalence-function)
 
 (define-function (alist-map-count lmap value)
   (alist-map-fold-left lmap
@@ -178,7 +178,7 @@
   (map #'car (cdr (slot-value lmap 'contents))))
 
 (define-function (alist-map-clear lmap)
-  (make<alist-map> <alist-map> (slot-value lmap 'comparator) '()))
+  (make<alist-map> <alist-map> (slot-value lmap 'equivalence-function) '()))
 (define-function (alist-map-clear! lmap)
   (set-cdr! (slot-value lmap 'contents) '())
   ;(slot-set! lmap 'contents (list (list 'unique)))
@@ -189,7 +189,7 @@
 (define-function (alist-map-get lmap key . maybe-ft)
   (let*-optionals #'alist-map-get maybe-ft
       ((ft (lambda () 'NIL)))
-    #|(LET ((COMPARE (SLOT-VALUE LMAP 'COMPARATOR))
+    #|(LET ((COMPARE (SLOT-VALUE LMAP 'EQUIVALENCE-FUNCTION))
           (CONTENTS (CDR (print (SLOT-VALUE LMAP 'CONTENTS)))))
       (ITERATE LOOP
         ((L CONTENTS))
