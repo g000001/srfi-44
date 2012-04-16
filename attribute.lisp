@@ -89,23 +89,101 @@
  (list #'flexible-sequence-delete-right! #'list-delete-right!
        (list <list>)))|#
 
-#|(add-methods
- (list #'map-equivalence-function     #'alist-map-equivalence-function     (list <alist-map>))
- (list #'map-key-equivalence-function #'alist-map-key-equivalence-function (list <alist-map>))
- (list #'map-contains-key? #'alist-map-contains-key? (list <alist-map>))
- (list #'map-keys->list #'alist-map-keys->list (list <alist-map>))
- (list #'map-get #'alist-map-get (list <alist-map>))
- (list #'map-put  #'alist-map-put  (list <alist-map>))
- (list #'map-put! #'alist-map-put! (list <alist-map>))
- (list #'map-update  #'alist-map-update  (list <alist-map>))
- (list #'map-update! #'alist-map-update! (list <alist-map>))
- (list #'map-delete  #'alist-map-delete  (list <alist-map>))
- (list #'map-delete! #'alist-map-delete! (list <alist-map>))
- (list #'map-delete-from  #'alist-map-delete-from  (list <alist-map>))
- (list #'map-delete-from! #'alist-map-delete-from! (list <alist-map>))
- (list #'map-add-from  #'alist-map-add-from  (list <alist-map>))
- (list #'map-add-from! #'alist-map-add-from! (list <alist-map>)))|#
+(defmethod map-equivalence-function (map)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-equivalence-function))
+           map))
 
+(defmethod map-key-equivalence-function (map)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-key-equivalence-function))
+           map))
+
+(defmethod map-contains-key? (map key)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-contains-key?))
+           map
+           key))
+
+(defmethod map-keys->list (map)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map->list))
+           map))
+
+(defmethod map-get (map key &optional absence-thunk)
+  (apply (etypecase map
+           (<alist-map> #'alist-map-get))
+         map
+         key
+         (and absence-thunk (list absence-thunk))))
+
+(defmethod map-put (map key value &optional absence-thunk)
+  (apply (etypecase map
+           (<alist-map> #'alist-map-put))
+         map
+         key
+         value
+         (and absence-thunk (list absence-thunk))))
+
+(defmethod map-put! (map key value &optional absence-thunk)
+  (apply (etypecase map
+           (<alist-map> #'alist-map-put!))
+         map
+         key
+         value
+         (and absence-thunk (list absence-thunk))))
+
+(defmethod map-update (map key func &optional absence-thunk)
+  (apply (etypecase map
+           (<alist-map> #'alist-map-update))
+         map
+         key
+         func
+         (and absence-thunk (list absence-thunk))))
+
+(defmethod map-update! (map key func &optional absence-thunk)
+  (apply (etypecase map
+           (<alist-map> #'alist-map-update!))
+         map
+         key
+         func
+         (and absence-thunk (list absence-thunk))))
+
+(defmethod map-delete (map key)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-delete))
+           map
+           key ))
+
+(defmethod map-delete! (map key)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-delete!))
+           map
+           key ))
+
+(defmethod map-delete-from (map bag)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-delete-from))
+           map
+           bag ))
+
+(defmethod map-delete-from! (map bag)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-delete-from!))
+           map
+           bag ))
+
+(defmethod map-add-from (map source-map)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-add-from))
+           map
+           source-map ))
+
+(defmethod map-add-from! (map source-map)
+  (funcall (etypecase map
+             (<alist-map> #'alist-map-add-from!))
+           map
+           source-map ))
 
 (defmethod collection-fold-keys-left (coll fold-function &rest seed)
   (apply (etypecase coll
