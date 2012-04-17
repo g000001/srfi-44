@@ -2,13 +2,14 @@
 
 ;;; - Vectors and Strings -
 
-;; MAKE-VECTOR, MAKE-STRING, VECTOR, and STRING? are R5RS primitives.
+;; vector -> cl:vector
+;; string -> cl:string
 
-;(define (vector . elts) (list->vector elts)) ;R5RS
-;(define (string . elts) (list->string elts)) ;R5RS
+(defmethod collection-name ((v cl:vector))
+  'cl:vector)
 
-#|(add-method #'collection-name (method next-method ((v <vector>)) 'vector))|#
-#|(add-method #'collection-name (method next-method ((s <string>)) 'string))|#
+(defmethod collection-name ((s cl:string))
+  'cl:string)
 
 (define-function vector-size #'vector-length)
 (define-function string-size #'string-length)
