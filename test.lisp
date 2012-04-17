@@ -9,7 +9,11 @@
     ((test* name
             (num expr <> result) ***)
      (test name
-       (is (not (equal result expr))) ***))))
+       (is (not (equal result expr))) ***))
+    ((test* name
+            (num expr) ***)
+     (test name
+       (is-true (progn expr t)) ***))))
 
 (define-syntax *-
   (syntax-rules ()
@@ -183,5 +187,23 @@
        (3  (alist-map? amap1) <> 'NIL))
 
 (testc-* :Collection-6 (list size ls1) => 3)
+(testc-* :Collection-7 (string size str1) => 3)
+(testc-* :Collection-8 (vector size vec1) => 3)
+(testc-* :Collection-9 (alist-map size amap1) => 3)
+
+(testc-* :Collection-10 (list count ls1 1) => 1)
+(testc-* :Collection-11 (string count str1 #\a) => 1)
+(testc-* :Collection-12 (vector count vec1 1) => 1)
+(testc-* :Collection-13 (alist-map count amap1 1) => 1)
+
+(testc-* :Collection-14 (list count ls1 'a) => 0)
+(testc-* :Collection-15 (string count str1 #\A) => 0)
+(testc-* :Collection-16 (vector count vec1 'a) => 0)
+(testc-* :Collection-17 (alist-map count amap1 'a) => 0)
+
+(testc-* :Collection-18 (list get-any ls1))
+(testc-* :Collection-19 (string get-any str1))
+(testc-* :Collection-20 (vector get-any vec1))
+(testc-* :Collection-21 (alist-map get-any amap1))
 
 ;;; eof

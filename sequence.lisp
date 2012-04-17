@@ -75,11 +75,6 @@
       (funcall absence-thunk)
       (elt (contents seq) index)))
 
-(defmethod collection-get-any ((seq cl:sequence) &optional maybe-ft)
-  (if (zero? (sequence-size seq))
-      (if (pair? maybe-ft) (funcall (car maybe-ft)) 'NIL)
-      (sequence-ref seq 0)))
-
 (defmethod sequence-copy ((seq cl:sequence) &optional (start 0) end)
   (cl:subseq (bag-copy seq) start end))
 
