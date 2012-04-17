@@ -17,6 +17,7 @@
                ;; (:file "tiny-clos")
                ;; (:file "utilities_tiny-clos")
                ;; (:file "srfi-44_tiny-clos")
+               (:file "class")
                (:file "list")
                (:file "vector-string")
                (:file "alist")
