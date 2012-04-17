@@ -1,10 +1,9 @@
 (cl:in-package :srfi-44.internal)
 
-;; LIST is defined by R5RS.
-; (define (list . l) l)
+;;; list -> cl:list
 
-#|(add-method #'collection-name
-  (method next-method ((l <list>)) 'list))|#
+(defmethod collection-name ((l cl:list))
+  'cl:list)
 
 ;;; - Lists -
 
