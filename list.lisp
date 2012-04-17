@@ -37,12 +37,12 @@
   (let ((knil-count (list-size knils)))
     (call-with-values
       (lambda ()
-        (iterate recur ((knils knils) (lst lst) (k 0))
+        (srfi-5:let recur ((knils knils) (lst lst) (k 0))
           (list-case lst
             (lambda () (apply #'values 'T knils))
             (lambda (elt1 elt2+)
               (receive (proceed? . new-knils)
-                  (recur knils elt2+ (+ k 1))
+                       (recur knils elt2+ (+ k 1))
                 (cond ((not (= (list-size new-knils) knil-count))
                        (error "Wrong number of knils"
                               #'list-fold-keys-right

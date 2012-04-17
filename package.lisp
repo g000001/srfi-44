@@ -6,7 +6,7 @@
 
 (defpackage :srfi-44
   (:use)
-  (:import-from :cl :list :vector :string :make-string)
+  (:import-from :cl :list :vector)
   (:export
    :collection-name
    :make-collection :make-bag :make-set :make-map :make-sequence
@@ -108,6 +108,7 @@
    :vector-get-left :vector-get-right :vector-set :vector-set!
    :vector-replace-from :vector-replace-from! :vector=)
   (:export
+   :string
    :make-string :string :string-fold-left :string-fold-right
    :string-equivalence-function :string-copy :string->list :string-size
    :string-empty? :string? :string-contains? :string-count :string-ref

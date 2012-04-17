@@ -3,7 +3,13 @@
 ;;; - Vectors and Strings -
 
 ;; vector -> cl:vector
-;; string -> cl:string
+;;
+(defun string (&rest args)
+  (cl:coerce args 'cl:string))
+
+(defun make-string (size &optional (init #\Nul))
+  (cl:make-string size :initial-element init))
+
 
 (defmethod collection-name ((v cl:vector))
   'cl:vector)

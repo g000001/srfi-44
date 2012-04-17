@@ -2,7 +2,7 @@
 
 (defmacro define-collection-method (collection-foo-name (&rest args)
                                     &rest classes)
-  (let* ((name (string collection-foo-name))
+  (let* ((name (cl:string collection-foo-name))
          (suf (intern (subseq name (mismatch "COLLECTION" name)))))
     `(progn
        ,@(mapcar (lambda (c)
@@ -18,7 +18,7 @@
 ;;; FIXME
 (defmacro define-collection-method* (collection-foo-name (&rest args)
                                      &rest classes)
-  (let* ((name (string collection-foo-name))
+  (let* ((name (cl:string collection-foo-name))
          (suf (intern (subseq name (mismatch "COLLECTION" name)))))
     `(progn
        ,@(mapcar (lambda (c)
@@ -73,7 +73,7 @@
                         0))|#
 
 (define-collection-method collection-size ()
-  list vector string <alist-map>)
+  list vector cl:string <alist-map>)
 
 ;;; procedure: *-count * value=> exact integer
 (defgeneric collection-count (coll value)
@@ -83,7 +83,7 @@
   (cl:count value (contents coll)))
 
 (define-collection-method collection-count (elt)
-  list vector string <alist-map>)
+  list vector cl:string <alist-map>)
 
 ;;; procedure: *-get-any * [absence-thunk]=> value
 (defgeneric collection-get-any (coll &optional absence-thunk)
@@ -102,7 +102,7 @@
   (zerop (collection-size coll)))
 
 (define-collection-method collection-empty? ()
-  list vector string <alist-map>)
+  list vector cl:string <alist-map>)
 
 ;;; procedure: *->list * => list
 (defgeneric collection->list (coll)
@@ -269,7 +269,7 @@ When the collection values are exhausted or a false proceed value is received fr
                                  `(got ,(list-size new-seeds)) )))))))|#
 
 (define-collection-method* collection-fold-left (f &rest seeds)
-  list vector string <alist-map>)
+  list vector cl:string <alist-map>)
 
 ;;; procedure: collection-fold-right collection fold-function seed ... => seed ...
 ;;; procedure: %-fold-right % fold-function seed ... => seed ...

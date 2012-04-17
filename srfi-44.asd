@@ -7,16 +7,9 @@
   :depends-on (:fiveam
                :srfi-2
                :srfi-23
-               :mbe
-               ;; :tiny-clos
-               )
+               :mbe)
   :components ((:file "package")
                (:file "util")
-               ;; (:file "utilities")
-               ;; (:file "support")
-               ;; (:file "tiny-clos")
-               ;; (:file "utilities_tiny-clos")
-               ;; (:file "srfi-44_tiny-clos")
                (:file "class")
                (:file "list")
                (:file "vector-string")
@@ -28,7 +21,8 @@
                (:file "sequence")
                (:file "flexible-sequence")
                (:file "attribute")
-               (:file "srfi-44")))
+               (:file "srfi-44")
+               (:file "test")))
 
 (defmethod perform ((o test-op) (c (eql (find-system :srfi-44))))
   (load-system :srfi-44)

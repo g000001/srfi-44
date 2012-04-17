@@ -246,7 +246,7 @@
 
 (defmethod collection-fold-keys-left (coll fold-function &rest seed)
   (apply (etypecase coll
-           (string #'string-fold-keys-left)
+           (cl:string #'string-fold-keys-left)
            (vector #'vector-fold-keys-left)
            (list #'list-fold-keys-left)
            (<alist-map> #'alist-map-fold-keys-left) )
@@ -256,7 +256,7 @@
 
 (defmethod collection-fold-keys-right (coll fold-function &rest seed)
   (apply (etypecase coll
-             (string #'string-fold-keys-right)
+             (cl:string #'string-fold-keys-right)
              (vector #'vector-fold-keys-right)
              (list #'list-fold-keys-right)
              (<alist-map> #'alist-map-fold-keys-right))
@@ -266,7 +266,7 @@
 
 (defmethod collection-fold-left (coll fold-function &rest seed)
   (apply (etypecase coll
-             (string #'string-fold-left)
+             (cl:string #'string-fold-left)
              (vector #'vector-fold-left)
              (list #'list-fold-left)
              (<alist-map> #'alist-map-fold-left))
@@ -276,7 +276,7 @@
 
 (defmethod collection-fold-right (coll fold-function &rest seed)
   (apply (etypecase coll
-             (string #'string-fold-right)
+             (cl:string #'string-fold-right)
              (vector #'vector-fold-right)
              (list #'list-fold-right)
              (<alist-map> #'alist-map-fold-right))
@@ -286,7 +286,7 @@
 
 (defmethod collection-size (coll)
   (funcall (etypecase coll
-             (string #'string-size)
+             (cl:string #'string-size)
              (vector #'vector-size)
              (list #'list-size)
              (<alist-map> #'alist-map-size))
@@ -294,7 +294,7 @@
 
 (defmethod collection-count (coll value)
   (funcall (etypecase coll
-             (string #'string-count)
+             (cl:string #'string-count)
              (vector #'vector-count)
              (list #'list-count)
              (<alist-map> #'alist-map-count))
@@ -303,7 +303,7 @@
 
 (defmethod collection-empty? (coll)
   (funcall (etypecase coll
-             (string #'string-empty?)
+             (cl:string #'string-empty?)
              (vector #'vector-empty?)
              (list #'list-empty?)
              (<alist-map> #'alist-map-empty?))
@@ -311,7 +311,7 @@
 
 (defmethod collection-get-any (coll &optional maybe-ft)
   (apply (etypecase coll
-           (string #'string-get-any)
+           (cl:string #'string-get-any)
            (vector #'vector-get-any)
            (list #'list-get-any)
            (<alist-map> #'alist-map-get-any))
@@ -320,7 +320,7 @@
 
 (defmethod collection-copy (coll)
   (funcall (etypecase coll
-             (string #'string-copy)
+             (cl:string #'string-copy)
              (vector #'vector-copy)
              (list #'list-copy)
              (<alist-map> #'alist-map-clear))
@@ -328,7 +328,7 @@
 
 (defmethod collection-clear (coll)
   (funcall (etypecase coll
-             (string #'string-clear)
+             (cl:string #'string-clear)
              (vector #'vector-clear)
              (list #'list-clear)
              (<alist-map> #'alist-map-clear))
@@ -336,7 +336,7 @@
 
 (defmethod collection-clear! (coll)
   (funcall (etypecase coll
-             (string #'string-clear!)
+             (cl:string #'string-clear!)
              (vector #'vector-clear!)
              (list #'list-clear!)
              (<alist-map> #'alist-map-clear!))
@@ -344,21 +344,21 @@
 
 (defmethod collection=-2op (pred col1 col2)
   (funcall (etypecase col1
-             (string #'string=)
+             (cl:string #'string=)
              (vector #'vector=)
              (list #'list=) )
            pred col1 col2))
 
 (defmethod bag-equivalence-function (object)
   (funcall (etypecase object
-             (string #'string-equivalence-function)
+             (cl:string #'string-equivalence-function)
              (vector #'vector-equivalence-function)
              (list #'list-equivalence-function) )
            object))
 
 (defmethod bag-contains? (bag value)
   (funcall (etypecase bag
-             (string #'string-contains?)
+             (cl:string #'string-contains?)
              (vector #'vector-contains?)
              (list #'list-contains?) )
            bag
@@ -366,7 +366,7 @@
 
 (defmethod sequence-ref (sequence integer &optional absence-thunk)
   (apply (etypecase sequence
-           (string #'string-ref)
+           (cl:string #'string-ref)
            (vector #'vector-ref)
            (list #'list-ref) )
          sequence
@@ -375,7 +375,7 @@
 
 (defmethod sequence-set (sequence integer value)
   (funcall (etypecase sequence
-             (string #'string-set)
+             (cl:string #'string-set)
              (vector #'vector-set)
              (list #'list-set) )
            sequence
@@ -384,7 +384,7 @@
 
 (defmethod sequence-set! (sequence integer value)
   (funcall (etypecase sequence
-             (string #'string-set!)
+             (cl:string #'string-set!)
              (vector #'vector-set!)
              (list #'list-set!) )
            sequence
@@ -393,7 +393,7 @@
 
 (defmethod sequence-get-left (sequence &optional absence-thunk)
   (apply (etypecase sequence
-           (string #'string-get-left)
+           (cl:string #'string-get-left)
            (vector #'vector-get-left)
            (list #'list-get-left) )
          sequence
@@ -401,7 +401,7 @@
 
 (defmethod sequence-get-right (sequence &optional absence-thunk)
   (apply (etypecase sequence
-           (string #'string-get-right)
+           (cl:string #'string-get-right)
            (vector #'vector-get-right)
            (list #'list-get-right))
          sequence
@@ -411,7 +411,7 @@
                                   dest-start source-sequence
                                   &optional source-start source-end)
   (apply (etypecase sequence
-           (string #'string-replace-from!)
+           (cl:string #'string-replace-from!)
            (vector #'vector-replace-from!)
            (list #'list-replace-from!))
          sequence
@@ -424,7 +424,7 @@
                                   dest-start source-sequence
                                   &optional source-start source-end)
   (apply (etypecase sequence
-           (string #'string-replace-from)
+           (cl:string #'string-replace-from)
            (vector #'vector-replace-from)
            (list #'list-replace-from))
          sequence
@@ -435,7 +435,7 @@
 
 (defmethod sequence-copy ((sequence cl:sequence) &optional (start 0) end)
   (apply (etypecase sequence
-           (string #'string-copy)
+           (cl:string #'string-copy)
            (vector #'vector-copy)
            (list #'list-copy))
          sequence
