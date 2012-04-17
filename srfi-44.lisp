@@ -1,7 +1,6 @@
 ;;;; srfi-44.lisp
 
 (cl:in-package :srfi-44.internal)
-;; (in-readtable :srfi-44)
 
 (def-suite srfi-44)
 
