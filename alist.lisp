@@ -2,15 +2,8 @@
 
 ;;; - Alists -
 
-#|(add-method #'initialize
-  (method next-method ((lmap <alist-map>) initargs)
-    (slot-set! lmap 'equivalence-function (car initargs))
-    (slot-set! lmap 'contents   (cons (list (list 'unique))
-                                      (cadr initargs)))
-    lmap))|#
-
-#|(add-method #'collection-name
-  (method next-method ((lmap <alist-map>)) 'alist-map))|#
+(defmethod collection-name ((lmap <alist-map>))
+  'alist-map)
 
 (defclass <alist-map> (<map>)
   ((equivalence-function :initarg :equivalence-function)

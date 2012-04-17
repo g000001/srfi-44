@@ -1,6 +1,18 @@
 (cl:in-package :srfi-44.internal)
 
-;
+(define-syntax test*
+  (syntax-rules (=> <>)
+    ((test* name
+            (num expr => result) ***)
+     (test name
+       (is (equal result expr)) ***))
+    ((test* name
+            (num expr <> result) ***)
+     (test name
+       (is (not (equal result expr))) ***))))
+
+;;; tests
+
 (test :Construction
   (is-true (progn (defparameter ls1 (list 1 2 3)) t))
   (is-true (progn (defparameter ls2 (make-list)) t))
@@ -30,13 +42,6 @@
 (define-function ap- (always-proceed #'-))
 (define-function apcons2 (always-proceed (lambda (a b c) (cons (cons a b) c))))
 
-(define-syntax test*
-  (syntax-rules (=>)
-    ((test* name
-            (num expr => result) ***)
-     (test name
-       (is (equal result expr)) ***))))
-
 (test* :Enumeration
   (0  (collection-fold-left ls1 #'ap+ 0) => 6)
   (1  (list-fold-left ls1 #'ap+ 0) => 6)
@@ -65,6 +70,30 @@
   (26  (collection-fold-keys-right str1 #'apcons2 '()) => idx2)
   (27  (string-fold-keys-right str1 #'apcons2 '()) => idx2)
   )
+
+(test* :Collections-3
+       (0  (collection? ls1) <> 'NIL)
+       (1  (collection? ls2) <> 'NIL)
+       (2  (collection? vec1) <> 'NIL)
+       (3  (collection? vec2) <> 'NIL)
+       (4  (collection? str1) <> 'NIL)
+       (5  (collection? str2) <> 'NIL)
+       (6  (collection? amap1) <> 'NIL)
+       (7  (collection? amap2) <> 'NIL))
+
+(test* :Collection-4
+       (0 (collection-name ls1) => 'list)
+       (1 (collection-name str1) => 'cl:string)
+       (2 (collection-name vec1) => 'vector)
+       (3 (collection-name amap1) => 'alist-map))
+
+(test* :Collection-5
+       (0  (list? ls1) <> 'NIL)
+       (1  (string? str1) <> 'NIL)
+       (2  (vector? vec1) <> 'NIL)
+       (3  (alist-map? amap1) <> 'NIL))
+
+
 
 #||||
 #||

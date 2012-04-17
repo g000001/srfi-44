@@ -48,6 +48,9 @@
 (defmethod collection? ((obj <collection>))
   T)
 
+(defmethod collection? ((obj cl:sequence)) T)
+(defmethod collection? ((obj <alist-map>)) T)
+
 ;;; procedure: collection-name collection => symbol (%)
 (defgeneric collection-name (coll)
   (:documentation "Returns the collection name of the provided collection. The name is a symbol containing the type name of the specific collection. A collection whose constructor is make-list, for example, would have the symbol list returned from collection-name"))
