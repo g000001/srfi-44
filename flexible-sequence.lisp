@@ -1,13 +1,18 @@
 (cl:in-package :srfi-44.internal)
 
-(defclass <flexible-sequence> (<sequence>) ())
+(defclass <flexible-sequence> (cl:sequence) ())
 
-(defvar <flexible-sequence> (find-class '<sequence>))
+(defvar <flexible-sequence> (find-class '<flexible-sequence>))
 
 ;;; - Flexible Sequences -
 
 (defun flexible-sequence? (obj)
-  (typep obj <flexible-sequence>))
+  (typecase obj
+    ((or cl:sequence
+         <alist-map>
+         <map>
+         <flexible-sequence>) t)
+    (otherwise nil)))
 
 (define-supertype-handled flexible-sequence?
   ((flexible-sequence-size fseq)

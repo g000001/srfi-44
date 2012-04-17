@@ -10,7 +10,10 @@
 ;;; - Bags -
 
 (defun bag? (obj)
-  (typep obj <bag>))
+  (typecase obj
+    ((or cl:sequence
+         <bag>) t)
+    (otherwise nil)))
 
 (define-supertype-handled bag?
   ((bag-size bag)
