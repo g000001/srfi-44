@@ -69,22 +69,6 @@
   ((sequence-delete-from! seq value)
    bag-delete-from!))
 
-(defmethod collection-fold-right ((seq cl:sequence) f &rest seeds)
-  (let ((size (sequence-size seq))
-        (seed-count (list-size seeds)) )
-    (srfi-5:let loop ((seeds seeds) (i (- size 1)))
-                (if (negative? i)
-                    (apply #'values seeds)
-                    (receive (proceed? . new-seeds)
-                             (apply f seeds)
-                      (if (= (list-size new-seeds) seed-count)
-                          (if proceed?
-                              (loop new-seeds (- i 1))
-                              (apply #'values new-seeds) )
-                          (error "(sequence)-fold-right: Wrong seed count"
-                                 `(expected ,seed-count)
-                                 `(got ,(list-size new-seeds)) )))))))
-
 (defmethod sequence-ref ((seq cl:sequence) (index integer)
                          &optional (absence-thunk (constantly 'NIL)))
   (if (null (contents seq))
