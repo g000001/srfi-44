@@ -104,3 +104,11 @@
 #|(bag= #'eql
       (make-instance <bag> :contents '(1 2 2 2 2 2 3))
       (make-instance <bag> :contents '(1 2 3 3)))|#
+
+(sequence= #'=
+           '(1 2 3 4)
+           '(1 2 3 4))
+
+(collection-name "foo")
+
+(vector= #'eql #() #())

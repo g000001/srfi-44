@@ -12,8 +12,6 @@
                )
   :components ((:file "package")
                (:file "util")
-               (:file "utilities")
-               (:file "utilities_tiny-clos")
                ;; (:file "utilities")
                ;; (:file "support")
                ;; (:file "tiny-clos")

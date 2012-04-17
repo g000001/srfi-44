@@ -1,7 +1,7 @@
 (cl:in-package :srfi-44.internal)
 
-(defclass <sequence> (<bag>) ())
-(defvar <sequence> (find-class '<bag>))
+(defclass <sequence> (<bag> cl:sequence) ())
+(defvar <sequence> (find-class '<sequence>))
 
 ;;; - Sequences -
 
