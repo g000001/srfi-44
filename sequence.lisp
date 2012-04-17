@@ -1,7 +1,8 @@
 (cl:in-package :srfi-44.internal)
 
-(defclass <sequence> (<bag> cl:sequence) ())
-(defvar <sequence> (find-class '<sequence>))
+;; (defclass <sequence> (<bag> cl:sequence) ())
+;; (defvar <sequence> (find-class '<sequence>))
+(defvar <sequence> (find-class 'cl:sequence))
 
 ;;; - Sequences -
 
@@ -68,7 +69,7 @@
   ((sequence-delete-from! seq value)
    bag-delete-from!))
 
-(defmethod collection-fold-right ((seq <sequence>) f &rest seeds)
+(defmethod collection-fold-right ((seq cl:sequence) f &rest seeds)
   (let ((size (sequence-size seq))
         (seed-count (list-size seeds)) )
     (srfi-5:let loop ((seeds seeds) (i (- size 1)))
@@ -84,57 +85,57 @@
                                  `(expected ,seed-count)
                                  `(got ,(list-size new-seeds)) )))))))
 
-(defmethod sequence-ref ((seq <sequence>) (index integer)
+(defmethod sequence-ref ((seq cl:sequence) (index integer)
                          &optional (absence-thunk (constantly 'NIL)))
   (if (null (contents seq))
       (funcall absence-thunk)
       (elt (contents seq) index)))
 
-(defmethod collection-get-any ((seq <sequence>) &optional maybe-ft)
+(defmethod collection-get-any ((seq cl:sequence) &optional maybe-ft)
   (if (zero? (sequence-size seq))
       (if (pair? maybe-ft) (funcall (car maybe-ft)) 'NIL)
       (sequence-ref seq 0)))
 
-(defmethod sequence-copy ((seq <sequence>) &optional (start 0) end)
+(defmethod sequence-copy ((seq cl:sequence) &optional (start 0) end)
   (cl:subseq (bag-copy seq) start end))
 
-(defmethod sequence-insert-right! ((seq <sequence>) value)
+(defmethod sequence-insert-right! ((seq cl:sequence) value)
   (setf (contents seq)
         (rplacd (last (contents seq))
                 (list value)))
   seq)
 
-(defmethod sequence-insert-right ((seq <sequence>) value)
+(defmethod sequence-insert-right ((seq cl:sequence) value)
   (sequence-insert-right! (sequence-copy seq) value))
 
-(defmethod sequence-insert-left! ((seq <sequence>) value)
+(defmethod sequence-insert-left! ((seq cl:sequence) value)
   (push value (contents seq))
   seq)
 
-(defmethod sequence-insert-left ((seq <sequence>) value)
+(defmethod sequence-insert-left ((seq cl:sequence) value)
   (sequence-insert-left! (sequence-copy seq) value))
 
-(defmethod sequence-get-left ((seq <sequence>) &optional maybe-fk)
+(defmethod sequence-get-left ((seq cl:sequence) &optional maybe-fk)
   (if (collection-empty? seq)
       (and maybe-fk (funcall (car maybe-fk)))
       (sequence-ref seq 0)))
 
-(defmethod sequence-get-right ((seq <sequence>) &optional maybe-fk)
+(defmethod sequence-get-right ((seq cl:sequence) &optional maybe-fk)
   (if (collection-empty? seq)
       (and maybe-fk (funcall (car maybe-fk)))
       (sequence-ref seq (- (collection-size seq) 1))))
 
-(defmethod sequence-set! ((seq <sequence>) k value)
+(defmethod sequence-set! ((seq cl:sequence) k value)
   (setf (elt (contents seq) k)
         value)
   seq)
 
-(defmethod sequence-set ((seq <sequence>) k value)
+(defmethod sequence-set ((seq cl:sequence) k value)
   (sequence-set! (sequence-copy seq) k value))
 
-(defmethod sequence-replace-from! ((seq <sequence>)
+(defmethod sequence-replace-from! ((seq cl:sequence)
                                    dstart
-                                   (source <sequence>)
+                                   (source cl:sequence)
                                    &optional (sstart 0) send)
   (replace (contents seq)
            (contents source)
@@ -142,9 +143,9 @@
            :start2 sstart
            :end1 send))
 
-(defmethod sequence-replace-from  ((seq <sequence>)
+(defmethod sequence-replace-from  ((seq cl:sequence)
                                    dstart
-                                   (source <sequence>)
+                                   (source cl:sequence)
                                    &optional (sstart 0) send)
   (sequence-replace-from! (sequence-copy seq)
                           dstart
