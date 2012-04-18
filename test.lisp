@@ -1,5 +1,12 @@
 (cl:in-package :srfi-44.internal)
 
+(define-function (list-contents-equal? ls1 ls2)
+  (and (= (length ls1) (length ls2))
+       (let loop ((x ls1))
+         (or (null? x)
+             (and (member (car x) ls2)
+                  (loop (cdr x)))))))
+
 (define-syntax test*
   (syntax-rules (=> <>)
     ((test* name
@@ -205,5 +212,18 @@
 (testc-* :Collection-19 (string get-any str1))
 (testc-* :Collection-20 (vector get-any vec1))
 (testc-* :Collection-21 (alist-map get-any amap1))
+
+(testc-* :Collection-22 (list empty? ls1) <> 'T)
+(testc-* :Collection-23 (string empty? str1) <> 'T)
+(testc-* :Collection-24 (vector empty? vec1) <> 'T)
+(testc-* :Collection-25 (alist-map empty? amap1) <> 'T)
+
+(testc-* :Collection-26 (list >list ls1) => ls1)
+(testc-* :Collection-27 (string >list str1) => '(#\a #\b #\c))
+(testc-* :Collection-28 (vector >list vec1) => ls1)
+(test*   :Collection-29
+         (0  (list-contents-equal? (alist-map->list amap1) ls1) <> 'NIL)
+         (1  (list-contents-equal? (map->list amap1) ls1) <> 'NIL)
+         (2  (list-contents-equal? (collection->list amap1) ls1) <> 'NIL))
 
 ;;; eof

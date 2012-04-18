@@ -117,7 +117,11 @@
 (define-function string-copy (vlike-copier #'make-string #'string-size
                                   #'cl:char #'string-set!))
 
-;; R5RS defines both VECTOR->LIST and STRING->LIST.
+(defun string->list (str)
+  (coerce str 'cl:list))
+
+(defun vector->list (vec)
+  (coerce vec 'cl:list))
 
 (define-function (vlike-contains? x-size x-ref elt=?)
   (lambda (vec value)

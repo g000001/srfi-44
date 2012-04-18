@@ -114,6 +114,12 @@
 (defmethod collection->list ((coll <collection>))
   (contents coll))
 
+(defmethod collection->list ((coll <alist-map>))
+  (alist-map->list coll))
+
+(defmethod collection->list ((coll cl:sequence))
+  (coerce coll 'list))
+
 ;;; procedure: *-clear * => %
 ;;; procedure: *-clear! * => %
 (defgeneric collection-clear! (coll)
