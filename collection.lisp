@@ -97,6 +97,11 @@
   (or (car (contents coll))
       (funcall absence-thunk)))
 
+(defmethod collection-get-any ((coll <map>)
+                               &optional (absence-thunk (constantly 'NIL)))
+  (or (car (cdr (contents coll)))
+      (funcall absence-thunk)))
+
 ;;; procedure: *-empty? * => boolean
 (defgeneric collection-empty? (coll)
   (:documentation "Returns a non-false value iff the given collection is known to be empty. This function should return false if it is known that there are values within the collection, or if it is unknown whether any values exist."))
@@ -126,7 +131,12 @@
   (:documentation "Clears the collection. In all cases a collection of the same type as the input is returned with no values or mappings. It is an error to clear an immutable collection and may be an error to clear a limited collection."))
 
 (defmethod collection-clear! ((coll <collection>))
-  (setf (contents coll) '() ))
+  (setf (contents coll) '() )
+  coll)
+
+(defmethod collection-clear! ((coll <map>))
+  (setf (contents coll) (cons (list 'unique) nil))
+  coll)
 
 (defgeneric collection-clear (coll)
   (:documentation "Clears the collection. In all cases a collection of the same type as the input is returned with no values or mappings. It is an error to clear an immutable collection and may be an error to clear a limited collection."))
@@ -244,10 +254,9 @@
   (make-instance (class-of coll)
                  :contents (copy-list (contents coll))))
 
-#|(collection= #'eql
-             (collection 1 2 2 2 2 2 3)
-             (collection 1 2 3 3))|#
-
+(defmethod collection-copy ((coll <map>))
+  (make-instance (class-of coll)
+                 :contents (copy-alist (contents coll))))
 
 ;;;; Enumeration
 

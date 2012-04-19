@@ -69,44 +69,65 @@
   ((sequence-delete-from! seq value)
    bag-delete-from!))
 
-(defmethod sequence-ref ((seq cl:sequence) (index integer)
+(defmethod sequence-ref ((seq <collection>) (index integer)
                          &optional (absence-thunk (constantly 'NIL)))
   (if (null (contents seq))
       (funcall absence-thunk)
       (elt (contents seq) index)))
 
-(defmethod sequence-copy ((seq cl:sequence) &optional (start 0) end)
+(defmethod sequence-ref ((seq cl:sequence) (index integer)
+                         &optional (absence-thunk (constantly 'NIL)))
+  (if (zerop (length seq))
+      (funcall absence-thunk)
+      (elt seq index)))
+
+(defmethod sequence-copy ((seq <collection>) &optional (start 0) end)
   (cl:subseq (bag-copy seq) start end))
 
-(defmethod sequence-insert-right! ((seq cl:sequence) value)
+(defmethod sequence-copy ((seq cl:sequence) &optional (start 0) end)
+  (cl:subseq seq start end))
+
+(defmethod sequence-insert-right! ((seq <collection>) value)
   (setf (contents seq)
         (rplacd (last (contents seq))
                 (list value)))
   seq)
 
-(defmethod sequence-insert-right ((seq cl:sequence) value)
+(defmethod sequence-insert-right! ((seq cl:sequence) value)
+  (rplacd (last seq) (list value))
+  seq)
+
+(defmethod sequence-insert-right (seq value)
   (sequence-insert-right! (sequence-copy seq) value))
 
-(defmethod sequence-insert-left! ((seq cl:sequence) value)
+(defmethod sequence-insert-left! ((seq <collection>) value)
   (push value (contents seq))
   seq)
 
-(defmethod sequence-insert-left ((seq cl:sequence) value)
+(defmethod sequence-insert-left! ((seq cl:sequence) value)
+  (push value seq)
+  seq)
+
+(defmethod sequence-insert-left (seq value)
   (sequence-insert-left! (sequence-copy seq) value))
 
 (defmethod sequence-get-left ((seq cl:sequence) &optional maybe-fk)
   (if (collection-empty? seq)
-      (and maybe-fk (funcall (car maybe-fk)))
+      (and maybe-fk (funcall maybe-fk))
       (sequence-ref seq 0)))
 
 (defmethod sequence-get-right ((seq cl:sequence) &optional maybe-fk)
   (if (collection-empty? seq)
-      (and maybe-fk (funcall (car maybe-fk)))
+      (and maybe-fk (funcall maybe-fk))
       (sequence-ref seq (- (collection-size seq) 1))))
 
-(defmethod sequence-set! ((seq cl:sequence) k value)
+(defmethod sequence-set! ((seq <collection>) k value)
   (setf (elt (contents seq) k)
         value)
+  seq)
+
+(defmethod sequence-set! ((seq cl:sequence) k value)
+  (setf (elt seq k) value)
   seq)
 
 (defmethod sequence-set ((seq cl:sequence) k value)

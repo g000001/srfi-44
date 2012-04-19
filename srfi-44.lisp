@@ -166,7 +166,7 @@
 
 (defmethod map-keys->list (map)
   (funcall (etypecase map
-             (<alist-map> #'alist-map->list))
+             (<alist-map> #'alist-map-keys->list))
            map))
 
 (defmethod map-get (map key &optional absence-thunk)
