@@ -7,6 +7,14 @@
 
 (defvar <bag>   (find-class '<bag>))
 
+(defun make-bag ()
+  (make-instance <bag>))
+
+(defun bag (&rest elts)
+  (let ((bag (make-bag)))
+    (setf (contents bag) elts)
+    bag))
+
 ;;; - Bags -
 
 (defun bag? (obj)
