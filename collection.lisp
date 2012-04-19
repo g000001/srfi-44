@@ -56,7 +56,7 @@
   (:documentation "Returns the collection name of the provided collection. The name is a symbol containing the type name of the specific collection. A collection whose constructor is make-list, for example, would have the symbol list returned from collection-name"))
 
 (defmethod collection-name ((coll <collection>))
-  (class-name (find-class coll)))
+  (class-name (class-of coll)))
 ;; (defmethod collection-name ((l <list>)) 'list)
 (defmethod collection-name ((l list)) 'list)
 
@@ -241,7 +241,7 @@
   (:documentation "Creates a new collection whose type and contents are the same as the collection passed as an operand, but which is distinct enough in storage that the new collection cannot be affected by modifications to the input collection and vice versa. This copy is shallow, that is, values are copied to the new collection in a way that preserves object identity."))
 
 (defmethod collection-copy ((coll <collection>))
-  (make-instance (find-class coll)
+  (make-instance (class-of coll)
                  :contents (copy-list (contents coll))))
 
 #|(collection= #'eql
