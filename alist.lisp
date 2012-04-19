@@ -2,15 +2,15 @@
 
 ;;; - Alists -
 
-(defmethod collection-name ((lmap <alist-map>))
-  'alist-map)
-
 (defclass <alist-map> (<map>)
   ((equivalence-function :initarg :equivalence-function)
    ;; contents: format (:dummy elt ...) tconc?
    ))
 
 (defvar <alist-map> (find-class '<alist-map>))
+
+(defmethod collection-name ((lmap <alist-map>))
+  'alist-map)
 
 (defun alist-map? (obj)
   (typep obj <alist-map>))
