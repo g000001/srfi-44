@@ -6,6 +6,7 @@
   :serial t
   :depends-on (:fiveam
                :srfi-2
+               :srfi-5
                :srfi-23
                :mbe)
   :components ((:file "package")
